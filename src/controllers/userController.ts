@@ -37,7 +37,7 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).lean();
     if (user && (await user.comparePassword(password))) {
       res.json({
         _id: user._id,
