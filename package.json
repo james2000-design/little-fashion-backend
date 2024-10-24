@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node ts-node dist/server.js",
+    "start": "node dist/server.js",
     "dev": "node ts-node src/server.ts",
     "build": "tsc"
   },
