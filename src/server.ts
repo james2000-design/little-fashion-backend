@@ -1,10 +1,17 @@
-import connectDB from "./config/db";
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import bodyParser from "body-parser";
+import * as dotenv from "dotenv";
+import * as express from "express";
+import * as cors from "cors";
+import * as bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes";
+import connectDB from "./config/db";
 
+// Load environment variables as early as possible
+dotenv.config();
+
+// Connect to MongoDB
+connectDB();
+
+// Initialize Express app
 const app = express();
 
 // Middleware
@@ -14,14 +21,11 @@ app.use(bodyParser.json());
 // Routes
 app.use("/api", userRoutes);
 
-export default app;
-dotenv.config();
-
-// Connect to MongoDB
-connectDB();
-
-// Start the server
+// Start the server only after successful DB connection
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
-  console.log(`Server is running on ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
+
+export default app;
