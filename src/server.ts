@@ -1,7 +1,7 @@
 import * as dotenv from "dotenv";
-import * as express from "express";
-import * as cors from "cors";
-import * as bodyParser from "body-parser";
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 import userRoutes from "./routes/userRoutes";
 import connectDB from "./config/db";
 
