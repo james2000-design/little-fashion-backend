@@ -37,19 +37,30 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email }).lean();
-    if (user && (await user.comparePassword(password))) {
-      res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        isAdmin: user.isAdmin,
-        token: generateToken(user._id.toString()),
-      });
-    } else {
-      res.status(401).json({ message: "Invalid email or password" });
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(401).json({ message: "Invalid email or password" });
     }
+
+    const isMatch = await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid email or password" });
+    }
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      token: generateToken(user._id.toString()),
+    });
   } catch (error) {
-    res.status(400).json({ message: "Error logging in", error });
+    console.error("Login error:", error);
+    res.status(500).json({
+      message: "Error logging in",
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
   }
 };
